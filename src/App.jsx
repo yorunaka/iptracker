@@ -7,7 +7,16 @@ import Tracker from './components/Tracker'
 import Footer from './components/Footer'
 
 const App = (props) => {
+  const [value, setValue] = useState('')
   const [data, setData] = useState([])
+
+  const handleSearchQuery = (query) => {
+    if (query != null){
+      setValue(query)
+      getApiData(query)
+    }
+  }
+
   const getApiData = async (ipAddress = '197.210.78.172') => {
     try {
       const apiKey = import.meta.env.VITE_APIKEY
@@ -20,16 +29,14 @@ const App = (props) => {
   }
   
   useEffect(() => {
-    // getApiData()
-    localStorage.setItem('data', JSON.stringify(data))
+    getApiData(value)
   }, [])
-  console.log(data)
 
   return (
     <div className='bg-blue-300 top-0 h-full w-full'>
       <Navbar />
       <Hero />
-      <Tracker ipData={data}/>
+      <Tracker ipData={data} searchValue={handleSearchQuery}/>
       <Footer />
     </div>
   )
